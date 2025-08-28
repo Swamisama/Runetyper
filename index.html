@@ -802,16 +802,15 @@ header h1 { font-size: 1.8rem; }
         
         if (settings.musicEnabled) {
           bgm.play().catch(err => {
-            console.log('Background music autoplay blocked:', err);
+            // Background music autoplay blocked
           });
         }
       } catch (error) {
-        console.log('Background music not available:', error);
+        // Background music not available
       }
     }
 
     // Profile management
-    let currentProfileName = '';
     
     function createProfile(name) {
       try {
@@ -4662,9 +4661,6 @@ header h1 { font-size: 1.8rem; }
     });
 
     function showScreen(key) {
-      console.log(`showScreen called with key: ${key}`);
-      console.log('Available screens:', Object.keys(screens));
-      console.log('Target screen element:', screens[key]);
       
       // Clean up Arena timers if switching away from Arena
       if (arenaTimer || spawnTimer) {
@@ -4683,30 +4679,21 @@ header h1 { font-size: 1.8rem; }
         }
       }
       
-      console.log('Removing active class from all screens...');
       Object.values(screens).forEach(s => {
         s.classList.remove('active');
-        console.log(`Removed active from:`, s.id);
       });
       
-      console.log(`Adding active class to ${key} screen...`);
       screens[key].classList.add('active');
-      console.log(`Screen ${key} is now active`);
       
       // Update currentScreen for keyboard navigation
       currentScreen = key;
-      console.log('Current screen updated to:', currentScreen);
       
       if (key === 'home') {
-        console.log('Rendering home screen...');
         renderHome();
       }
       if (key === 'startup') {
-        console.log('Rendering startup screen...');
         renderStartupScreen();
       }
-      
-      console.log(`showScreen completed for ${key}`);
     }
 
     // Achievements
@@ -4851,14 +4838,7 @@ header h1 { font-size: 1.8rem; }
       zen: new Set()
     };
 
-    function getMultiplier() {
-      // 5% per correct in streak, capped at +100% (2x)
-      const m = 1 + Math.min(wordStreak, 20) * 0.05;
-      return Math.max(1, Math.min(2, m));
-    }
-    function updateComboUI() {
-      comboDisplay.textContent = `Combo x${getMultiplier().toFixed(2)} (${wordStreak})`;
-    }
+
 
     function startSkill(skillKey) {
       currentSkillKey = skillKey;
@@ -5442,17 +5422,14 @@ raidInput.addEventListener('keydown', (e) => {
 
     function finishArena(difficulty) {
       // Update high score if current score is higher
-      if (arenaScore > (profile.arena.highScores[difficulty] || 0)) {
-        profile.arena.highScores[difficulty] = arenaScore;
-        saveProfile();
-        arenaHighScoreElem.textContent = arenaScore;
-        console.log(`New high score for ${difficulty}: ${arenaScore}`);
-        
-        // Check for achievements
-        checkAchievements();
-      } else {
-        console.log(`Score ${arenaScore} didn't beat high score ${profile.arena.highScores[difficulty] || 0} for ${difficulty}`);
-      }
+              if (arenaScore > (profile.arena.highScores[difficulty] || 0)) {
+          profile.arena.highScores[difficulty] = arenaScore;
+          saveProfile();
+          arenaHighScoreElem.textContent = arenaScore;
+          
+          // Check for achievements
+          checkAchievements();
+        }
       
       // Clear all targets
       clearArenaTargets();
@@ -5634,16 +5611,6 @@ raidInput.addEventListener('keydown', (e) => {
       // Check for achievements
       checkAchievements();
     }
-    function buyTheme(key) {
-      const meta = themeCatalog[key]; if (!meta) return;
-      if (profile.shop.purchasedThemes.includes(key)) return;
-      if (profile.gold < meta.price) { alert('Not enough gold'); return; }
-      profile.gold -= meta.price; profile.shop.purchasedThemes.push(key);
-      saveProfile(); renderShop(); renderHome();
-      
-      // Check for achievements
-      checkAchievements();
-    }
     
     function applyThemeOwned(key) {
       if (!profile.shop.purchasedThemes.includes(key)) return;
@@ -5652,21 +5619,14 @@ raidInput.addEventListener('keydown', (e) => {
 
     // First-time user popup functionality
     function showFirstTimePopup() {
-      console.log('showFirstTimePopup called');
       const popup = document.getElementById('firstTimePopup');
-      console.log('Popup element found:', popup);
       if (popup) {
         popup.style.display = 'flex';
-        console.log('Popup display set to flex');
         // Focus the close button for accessibility
         const closeBtn = document.getElementById('closeFirstTimePopup');
-        console.log('Close button found:', closeBtn);
         if (closeBtn) {
           closeBtn.focus();
-          console.log('Close button focused');
         }
-      } else {
-        console.error('Popup element not found!');
       }
     }
 
@@ -5687,18 +5647,11 @@ raidInput.addEventListener('keydown', (e) => {
       homeButtons.forEach(btnId => {
         const btn = document.getElementById(btnId);
         if (btn) {
-          console.log(`Adding click listener to ${btnId}:`, btn);
           btn.addEventListener('click', () => {
-            console.log(`Home button ${btnId} clicked!`);
-            console.log('Current screen before:', currentScreen);
             showScreen('home');
-            console.log('Current screen after showScreen:', currentScreen);
             updateProfileDisplay();
             renderHome();
-            console.log('Home button functionality completed');
           });
-        } else {
-          console.warn(`Home button ${btnId} not found!`);
         }
       });
     }
@@ -5707,14 +5660,8 @@ raidInput.addEventListener('keydown', (e) => {
 
     // Init
     function init(){ 
-      console.log('=== INIT FUNCTION STARTED ===');
-      console.log('Profile at start of init:', profile);
-      console.log('Profile name:', profile?.name);
-      console.log('Profile hasSeenFirstTimePopup:', profile?.hasSeenFirstTimePopup);
-      
       // Check if we have a saved profile
       if (profile && profile.name) {
-        console.log('Existing profile found, loading...');
         // Automatically load the existing profile and go to home
         profile.lastPlayed = Date.now();
         saveProfile();
@@ -5726,19 +5673,12 @@ raidInput.addEventListener('keydown', (e) => {
         renderHome();
         
         // Check if this is the first time playing and show popup
-        console.log('Profile loaded, checking popup status...');
-        console.log('profile.hasSeenFirstTimePopup:', profile.hasSeenFirstTimePopup);
         if (!profile.hasSeenFirstTimePopup) {
-          console.log('First time user, scheduling popup...');
           setTimeout(() => showFirstTimePopup(), 1000);
           profile.hasSeenFirstTimePopup = true;
           saveProfile();
-          console.log('Popup scheduled and flag saved');
-        } else {
-          console.log('User has already seen popup, skipping...');
         }
       } else {
-        console.log('No profile found, showing startup screen...');
         // Show startup screen to create new profile
         showScreen('startup');
         renderStartupScreen();
@@ -5751,81 +5691,10 @@ raidInput.addEventListener('keydown', (e) => {
       const closePopupBtn = document.getElementById('closeFirstTimePopup');
       if (closePopupBtn) {
         closePopupBtn.addEventListener('click', hideFirstTimePopup);
-        console.log('Popup close button event listener added');
-      } else {
-        console.warn('Popup close button not found for event listener');
-      }
-      
-      console.log('=== INIT FUNCTION COMPLETED ===');
-    }
-
-    // Debug function to show Arena state
-    function debugArenaState() {
-      console.log('=== Arena Debug Info ===');
-      console.log('Current Score:', arenaScore);
-      console.log('Current Time:', arenaTime);
-      console.log('Timer Active:', !!arenaTimer);
-      console.log('Spawn Timer Active:', !!spawnTimer);
-      console.log('Board Children:', arenaBoard ? arenaBoard.children.length : 'No board');
-      console.log('High Scores:', profile.arena.highScores);
-      console.log('Current Difficulty:', arenaDifficultySelect.value);
-      console.log('=======================');
-    }
-
-    // Make debug function available globally for testing
-    window.debugArenaState = debugArenaState;
-    
-    // Debug function to force show first-time popup
-    function debugShowPopup() {
-      console.log('Forcing popup to show...');
-      showFirstTimePopup();
-    }
-    
-    // Debug function to test Home button functionality
-    function debugHomeButton() {
-      console.log('Testing Home button functionality...');
-      console.log('Current profile:', profile);
-      console.log('hasSeenFirstTimePopup:', profile.hasSeenFirstTimePopup);
-      
-      // Force reset the popup flag for testing
-      profile.hasSeenFirstTimePopup = false;
-      saveProfile();
-      console.log('Reset hasSeenFirstTimePopup to false');
-      
-      // Test the popup
-      setTimeout(() => showFirstTimePopup(), 1000);
-    }
-    
-    // Debug function to reset popup flag
-    function debugResetPopup() {
-      console.log('Resetting popup flag...');
-      if (profile) {
-        profile.hasSeenFirstTimePopup = false;
-        saveProfile();
-        console.log('Popup flag reset to false');
-        
-        // Reload the page to test
-        console.log('Reloading page to test popup...');
-        setTimeout(() => location.reload(), 1000);
-      } else {
-        console.log('No profile found');
       }
     }
-    
-    // Debug function to clear profile for testing
-    function debugClearProfile() {
-      console.log('Clearing profile for testing...');
-      localStorage.removeItem(STORAGE_KEYS.profile);
-      console.log('Profile cleared from localStorage');
-      console.log('Reloading page...');
-      setTimeout(() => location.reload(), 1000);
-    }
-    
-    // Make debug functions available globally for testing
-    window.debugShowPopup = debugShowPopup;
-    window.debugHomeButton = debugHomeButton;
-    window.debugResetPopup = debugResetPopup;
-    window.debugClearProfile = debugClearProfile;
+
+
 
     // Keyboard Navigation System
     let currentFocusIndex = 0;
@@ -5862,13 +5731,7 @@ raidInput.addEventListener('keydown', (e) => {
         window.skillColumns = 2; // Skill buttons are in 2 columns
         window.skillRows = Math.ceil(skillButtons.length / window.skillColumns);
         
-        console.log('Home screen keyboard navigation initialized:', {
-          topRowCount: window.topRowCount,
-          skillRowCount: window.skillRowCount,
-          skillColumns: window.skillColumns,
-          skillRows: window.skillRows,
-          totalElements: focusableElements.length
-        });
+
         
         // For home screen, don't automatically set focus to avoid interfering with profile creation
         // Focus will be set manually when needed
@@ -5880,15 +5743,10 @@ raidInput.addEventListener('keydown', (e) => {
         
         focusableElements = [...titleOptions, ...achievementItems];
         
-        console.log('Achievements screen keyboard navigation initialized:', {
-          titleOptionsCount: titleOptions.length,
-          achievementItemsCount: achievementItems.length,
-          totalElements: focusableElements.length
-        });
+
       } else if (screen === 'startup') {
         // Startup screen: no keyboard navigation needed
         focusableElements = [];
-        console.log('Startup screen keyboard navigation initialized: no focusable elements');
         return;
       } else if (screen === 'shop') {
         // Shop: theme buttons in grid layout (not the cards themselves)
@@ -5921,12 +5779,7 @@ raidInput.addEventListener('keydown', (e) => {
           window.shopRows = themeButtons.length;
         }
         
-        console.log('Shop screen keyboard navigation initialized:', {
-          themeButtonsCount: themeButtons.length,
-          shopColumns: window.shopColumns,
-          shopRows: window.shopRows,
-          totalElements: focusableElements.length
-        });
+
       } else {
         focusableElements = [];
         return;
@@ -5962,8 +5815,6 @@ raidInput.addEventListener('keydown', (e) => {
 
     // Handle keyboard navigation
     function handleKeyboardNavigation(e) {
-      console.log('Global keyboard handler:', e.key, 'currentScreen:', currentScreen, 'focusableElements.length:', focusableElements.length);
-      
       // Handle Escape key for all screens
       if (e.key === 'Escape') {
         e.preventDefault();
@@ -5977,13 +5828,11 @@ raidInput.addEventListener('keydown', (e) => {
       
       // Don't handle keyboard navigation on startup screen
       if (currentScreen === 'startup') {
-        console.log('Ignoring keyboard event on startup screen');
         return;
       }
       
       // Don't handle Enter/Space if the profile name input is focused
       if ((e.key === 'Enter' || e.key === ' ') && document.activeElement === document.getElementById('profileNameInput')) {
-        console.log('Ignoring Enter/Space event on profile name input');
         return;
       }
       
@@ -6182,9 +6031,7 @@ raidInput.addEventListener('keydown', (e) => {
         case 'Enter':
         case ' ':
           e.preventDefault();
-          console.log('Processing Enter/Space, currentFocusIndex:', currentFocusIndex, 'focusableElements[currentFocusIndex]:', focusableElements[currentFocusIndex]);
           if (focusableElements[currentFocusIndex]) {
-            console.log('Clicking element:', focusableElements[currentFocusIndex].id || focusableElements[currentFocusIndex].textContent);
             focusableElements[currentFocusIndex].click();
           }
           return;
@@ -6214,67 +6061,6 @@ raidInput.addEventListener('keydown', (e) => {
       // Don't call initKeyboardNavigation here since it's already called by showScreen wrapper
       // This prevents duplicate initialization and potential race conditions
     };
-
-    // Render achievements function (if not already defined)
-    if (typeof renderAchievements === 'undefined') {
-      function renderAchievements() {
-        const titleSelectionList = document.getElementById('titleSelectionList');
-        const unlockedList = document.getElementById('unlockedList');
-        const lockedList = document.getElementById('lockedList');
-        
-        if (titleSelectionList) {
-          titleSelectionList.innerHTML = '';
-          // Add "No Title" option
-          const noTitleOption = document.createElement('div');
-          noTitleOption.className = `title-option ${!profile.achievements.selectedTitle ? 'selected' : ''}`;
-          noTitleOption.textContent = 'No Title';
-          noTitleOption.onclick = () => selectTitle(null);
-          titleSelectionList.appendChild(noTitleOption);
-          
-          if (profile.achievements.titles.length > 0) {
-            profile.achievements.titles.forEach(title => {
-              const titleOption = document.createElement('div');
-              titleOption.className = `title-option ${title === profile.achievements.selectedTitle ? 'selected' : ''}`;
-              titleOption.textContent = title;
-              titleOption.onclick = () => selectTitle(title);
-              titleSelectionList.appendChild(titleOption);
-            });
-          } else {
-            titleSelectionList.appendChild(document.createElement('div')).innerHTML = '<div style="color: var(--muted); font-style: italic;">No titles unlocked yet</div>';
-          }
-        }
-        
-        unlockedList.innerHTML = '';
-        lockedList.innerHTML = '';
-        
-        Object.values(achievements).forEach(achievement => {
-          const isUnlocked = profile.achievements.unlocked.includes(achievement.id);
-          const list = isUnlocked ? unlockedList : lockedList;
-          
-          const achievementItem = document.createElement('div');
-          achievementItem.className = `achievement-item ${isUnlocked ? 'unlocked' : 'locked'}`;
-          
-          const icon = isUnlocked ? '🏆' : '🔒';
-          const titleText = isUnlocked ? `Title: ${achievement.title}` : `Unlock: ${achievement.title}`;
-          
-          achievementItem.innerHTML = `
-            <div class="achievement-icon">${icon}</div>
-            <div class="achievement-info">
-              <div class="achievement-name">${achievement.name}</div>
-              <div class="achievement-description">${achievement.description}</div>
-              <div class="achievement-title">${titleText}</div>
-            </div>
-          `;
-          
-          list.appendChild(achievementItem);
-        });
-        
-        // Show message if no achievements unlocked
-        if (unlockedList.children.length === 0) {
-          unlockedList.innerHTML = '<div style="text-align: center; color: var(--muted); padding: 1rem;">No achievements unlocked yet. Keep playing to earn titles!</div>';
-        }
-      }
-    }
 
     // Update renderAchievements to refresh keyboard navigation
     const originalRenderAchievements = renderAchievements;
@@ -6344,49 +6130,6 @@ raidInput.addEventListener('keydown', (e) => {
         if (unlockedList.children.length === 0) {
           unlockedList.innerHTML = '<div style="text-align: center; color: var(--muted); padding: 1rem;">No achievements unlocked yet. Keep playing to earn titles!</div>';
         }
-      }
-    }
-
-    // Render shop function (if not already defined)
-    if (typeof renderShop === 'undefined') {
-      function renderShop() {
-        // Themes
-        themeCards.innerHTML = '';
-        Object.entries(themeCatalog).forEach(([key, meta]) => {
-          const owned = profile.shop.purchasedThemes.includes(key);
-          const isActive = profile.shop.activeTheme === key;
-          const card = document.createElement('div');
-          card.className = 'card';
-          card.innerHTML = `
-            <div class="card-row">
-              <div style="font-weight:700;">${meta.name}</div>
-              <div class="muted">${owned ? 'Owned' : meta.price + ' gold'}</div>
-            </div>
-            <div class="theme-swatch">
-              <div class="swatch" style="background:${meta.swatch[0]}"></div>
-              <div class="swatch" style="background:${meta.swatch[1]}"></div>
-              <div class="swatch" style="background:${meta.swatch[2]}"></div>
-            </div>
-            <div class="card-row">
-              <button class="btn ${owned ? '' : 'btn-ghost'}" data-type="theme" data-action="${owned ? 'apply' : 'buy'}" data-key="${key}">
-                ${owned ? (isActive ? 'Active' : 'Apply') : 'Buy'}
-              </button>
-            </div>
-          `;
-          themeCards.appendChild(card);
-        });
-
-        // Bind buttons
-        document.querySelectorAll('#shopScreen button[data-type]').forEach(btn => {
-          btn.addEventListener('click', () => {
-            const type = btn.getAttribute('data-type');
-            const action = btn.getAttribute('data-action');
-            const key = btn.getAttribute('data-key');
-            if (type === 'theme') {
-              if (action === 'buy') buyTheme(key); else applyThemeOwned(key);
-            }
-          });
-        });
       }
     }
 
