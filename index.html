@@ -364,6 +364,52 @@
     /* Particles */
     #particleCanvas { position: fixed; inset: 0; pointer-events: none; z-index: 10; }
 
+    /* Popup Styles */
+    .popup-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.8);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+      backdrop-filter: blur(4px);
+    }
+
+    .popup-content {
+      background: var(--panel-bg);
+      border: 2px solid var(--accent-correct);
+      border-radius: 12px;
+      padding: 2rem;
+      max-width: 500px;
+      width: 90%;
+      box-shadow: var(--shadow-2);
+      animation: slideIn 0.3s ease-out;
+    }
+
+    .popup-content h2 {
+      text-align: center;
+      margin-bottom: 1rem;
+      font-family: var(--heading-font);
+    }
+
+    .popup-content ul {
+      list-style-type: none;
+      padding: 0;
+    }
+
+    .popup-content li {
+      margin-bottom: 0.5rem;
+      padding-left: 0;
+    }
+
+    .popup-content strong {
+      color: var(--accent-correct);
+    }
+
 header { padding: 0.5rem 1rem; }
 header h1 { font-size: 1.8rem; }
 .panel { margin: 0.75rem auto; padding: 0.75rem; }
@@ -440,6 +486,27 @@ header h1 { font-size: 1.8rem; }
     </div>
   </section>
 
+  <!-- First Time User Popup -->
+  <div id="firstTimePopup" class="popup-overlay" style="display: none;">
+    <div class="popup-content">
+      <h2 style="color: var(--accent-correct); margin-bottom: 1rem;">Welcome to RuneTyper!</h2>
+      <div style="text-align: left; line-height: 1.6;">
+        <p><strong>Keyboard Navigation:</strong></p>
+        <ul style="margin: 0.5rem 0 1rem 1.5rem;">
+          <li>Use <strong>Arrow Keys</strong> to navigate between UI elements</li>
+          <li>Press <strong>Enter</strong> or <strong>Space</strong> to select/activate</li>
+        </ul>
+        <p><strong>Quick Navigation:</strong></p>
+        <ul style="margin: 0.5rem 0 1rem 1.5rem;">
+          <li>Press <strong>ESC</strong> to return to the main screen from any menu</li>
+        </ul>
+        <p style="margin-top: 1rem; font-size: 0.9rem; color: var(--muted);">
+        </p>
+      </div>
+      <button id="closeFirstTimePopup" class="btn" style="margin-top: 1rem;">Got it!</button>
+    </div>
+  </div>
+
   <!-- Home -->
   <section id="homeScreen" class="panel" aria-labelledby="homeHeading">
     <div id="homeHeaderBar">
@@ -474,8 +541,9 @@ header h1 { font-size: 1.8rem; }
 
   <!-- Skills Game -->
   <section id="gameScreen" class="panel" aria-labelledby="gameHeading">
-    <div class="row mb-1">
+    <div class="row mb-1" style="justify-content: space-between; align-items: center;">
       <h2 id="gameHeading" style="margin:0;">Skill: <span id="skillTitle">—</span></h2>
+                     <button id="gameHomeBtn" class="btn btn-ghost" style="font-size: 0.9rem; padding: 0.4rem 0.8rem;">Home</button>
     </div>
 
     <div class="row mb-1 center" style="justify-content:center;">
@@ -497,8 +565,9 @@ header h1 { font-size: 1.8rem; }
 
   <!-- Raid -->
   <section id="raidScreen" class="panel" aria-labelledby="raidHeading">
-    <div class="row mb-1">
+    <div class="row mb-1" style="justify-content: space-between; align-items: center;">
       <h2 id="raidHeading" style="margin:0;">Raid Mode</h2>
+                     <button id="raidHomeBtn" class="btn btn-ghost" style="font-size: 0.9rem; padding: 0.4rem 0.8rem;">Home</button>
     </div>
     <div class="row center" style="justify-content:center;">
       <div>Level: <span id="raidLevel">1</span></div>
@@ -511,8 +580,9 @@ header h1 { font-size: 1.8rem; }
 
   <!-- Arena -->
   <section id="arenaScreen" class="panel" aria-labelledby="arenaHeading">
-    <div class="row mb-1">
+    <div class="row mb-1" style="justify-content: space-between; align-items: center;">
       <h2 id="arenaHeading" style="margin:0;">Arena</h2>
+                     <button id="arenaHomeBtn" class="btn btn-ghost" style="font-size: 0.9rem; padding: 0.4rem 0.8rem;">Home</button>
     </div>
 
     <div class="row mb-1">
@@ -539,8 +609,9 @@ header h1 { font-size: 1.8rem; }
 
   <!-- Duel (narrower) -->
   <section id="duelScreen" class="panel" aria-labelledby="duelHeading">
-    <div class="row mb-1">
+    <div class="row mb-1" style="justify-content: space-between; align-items: center;">
       <h2 id="duelHeading" style="margin:0;">Duel</h2>
+                     <button id="duelHomeBtn" class="btn btn-ghost" style="font-size: 0.9rem; padding: 0.4rem 0.8rem;">Home</button>
     </div>
 
     <div class="mb-1">Gold: <span id="duelGoldDisplay">0</span></div>
@@ -578,8 +649,9 @@ header h1 { font-size: 1.8rem; }
 
   <!-- Zen -->
   <section id="zenScreen" class="panel" aria-labelledby="zenHeading">
-    <div class="row mb-1">
+    <div class="row mb-1" style="justify-content: space-between; align-items: center;">
       <h2 id="zenHeading" style="margin:0;">Zen Mode</h2>
+                     <button id="zenHomeBtn" class="btn btn-ghost" style="font-size: 0.9rem; padding: 0.4rem 0.8rem;">Home</button>
     </div>
     <div class="row center" style="justify-content:center;">
       <div>Words Completed: <span id="zenWordsCompleted">0</span></div>
@@ -592,8 +664,9 @@ header h1 { font-size: 1.8rem; }
 
   <!-- Shop -->
   <section id="shopScreen" class="panel" aria-labelledby="shopHeading">
-    <div class="row mb-1">
+    <div class="row mb-1" style="justify-content: space-between; align-items: center;">
       <h2 id="shopHeading" style="margin:0;">Theme Shop</h2>
+                     <button id="shopHomeBtn" class="btn btn-ghost" style="font-size: 0.9rem; padding: 0.4rem 0.8rem;">Home</button>
     </div>
 
     <div class="shop-section">
@@ -605,8 +678,9 @@ header h1 { font-size: 1.8rem; }
 
   <!-- Achievements -->
   <section id="achievementsScreen" class="panel" aria-labelledby="achievementsHeading">
-    <div class="row mb-1">
+    <div class="row mb-1" style="justify-content: space-between; align-items: center;">
       <h2 id="achievementsHeading" style="margin:0;">Achievements</h2>
+                     <button id="achievementsHomeBtn" class="btn btn-ghost" style="font-size: 0.9rem; padding: 0.4rem 0.8rem;">Home</button>
     </div>
     
     <div id="achievementsContent">
@@ -629,8 +703,9 @@ header h1 { font-size: 1.8rem; }
 
   <!-- Options -->
   <section id="optionsScreen" class="panel" aria-labelledby="optionsHeading">
-    <div class="row mb-1">
+    <div class="row mb-1" style="justify-content: space-between; align-items: center;">
       <h2 id="optionsHeading" style="margin:0;">Settings</h2>
+      <button id="optionsHomeBtn" class="btn btn-ghost" style="font-size: 0.9rem; padding: 0.4rem 0.8rem;">Home</button>
     </div>
 
     <div style="max-width: 500px; margin: 0 auto;">
@@ -680,6 +755,27 @@ header h1 { font-size: 1.8rem; }
     // Storage keys (v3)
     const STORAGE_KEYS = { profile: 'rt_profile_v3', settings: 'rt_settings_v3' };
 
+    // Background music functionality
+    let bgm = null;
+    
+    function startBackgroundMusic() {
+      try {
+        if (!bgm) {
+          bgm = new Audio('song.mp3');
+          bgm.loop = true;
+          bgm.volume = settings.musicVolume || 0.5;
+        }
+        
+        if (settings.musicEnabled) {
+          bgm.play().catch(err => {
+            console.log('Background music autoplay blocked:', err);
+          });
+        }
+      } catch (error) {
+        console.log('Background music not available:', error);
+      }
+    }
+
     // Profile management
     let currentProfileName = '';
     
@@ -697,6 +793,7 @@ header h1 { font-size: 1.8rem; }
         newProfile.name = profileName;
         newProfile.createdAt = Date.now();
         newProfile.lastPlayed = Date.now();
+        newProfile.hasSeenFirstTimePopup = false;
         
         // Save as the single profile
         profile = newProfile;
@@ -728,6 +825,9 @@ header h1 { font-size: 1.8rem; }
         showScreen('startup');
         renderStartupScreen();
         
+        // Note: When a new profile is created, it will have hasSeenFirstTimePopup: false
+        // so the popup will show again for the "new" user
+        
         return true;
       }
       return false;
@@ -750,6 +850,10 @@ header h1 { font-size: 1.8rem; }
     function renderStartupScreen() {
       // Startup screen only shows when no profile exists
       // This function is kept for consistency but doesn't need complex logic
+      const profileNameInput = document.getElementById('profileNameInput');
+      if (profileNameInput) {
+        profileNameInput.focus();
+      }
     }
 
     // Default profile: you will add words manually later
@@ -4155,7 +4259,9 @@ header h1 { font-size: 1.8rem; }
     function saveProfile(){ 
       localStorage.setItem(STORAGE_KEYS.profile, JSON.stringify(profile)); 
     }
-    function saveSettings(){ localStorage.setItem(STORAGE_KEYS.settings, JSON.stringify(settings)); }
+    function saveSettings(){ 
+      localStorage.setItem(STORAGE_KEYS.settings, JSON.stringify(settings)); 
+    }
 
     // Achievement system functions
     function checkAchievements() {
@@ -4197,11 +4303,25 @@ header h1 { font-size: 1.8rem; }
     }
     
     function showAchievementNotification(achievements) {
+      // Track existing achievement notifications to stack them vertically
+      const existingNotifications = document.querySelectorAll('[data-achievement-notification]');
+      const maxNotifications = 3; // Maximum notifications to show at once
+      const topOffset = 20 + (existingNotifications.length * 120); // 120px height per notification
+      
+      // If we have too many notifications, remove the oldest one
+      if (existingNotifications.length >= maxNotifications) {
+        const oldestNotification = existingNotifications[0];
+        if (oldestNotification.parentNode) {
+          oldestNotification.parentNode.removeChild(oldestNotification);
+        }
+      }
+      
       // Create notification element
       const notification = document.createElement('div');
+      notification.setAttribute('data-achievement-notification', 'true');
       notification.style.cssText = `
         position: fixed;
-        top: 20px;
+        top: ${topOffset}px;
         right: 20px;
         background: var(--panel-bg);
         border: 2px solid var(--accent-correct);
@@ -4212,6 +4332,7 @@ header h1 { font-size: 1.8rem; }
         max-width: 300px;
         box-shadow: 0 4px 12px rgba(0,0,0,0.3);
         animation: slideIn 0.5s ease-out;
+        min-height: 100px;
       `;
       
       let html = '<div style="color: var(--accent-correct); font-weight: bold; margin-bottom: 0.5rem;">🏆 Achievement Unlocked!</div>';
@@ -4232,10 +4353,17 @@ header h1 { font-size: 1.8rem; }
       setTimeout(() => {
         if (notification.parentNode) {
           notification.parentNode.removeChild(notification);
+          
+          // Reposition remaining notifications to close the gap
+          const remainingNotifications = document.querySelectorAll('[data-achievement-notification]');
+          remainingNotifications.forEach((notif, index) => {
+            const newTopOffset = 20 + (index * 120);
+            notif.style.top = `${newTopOffset}px`;
+          });
         }
       }, 5000);
     }
-    
+
     function getCurrentTitle() {
       if (!profile || !profile.achievements || profile.achievements.titles.length === 0) return '';
       
@@ -4337,6 +4465,8 @@ header h1 { font-size: 1.8rem; }
     };
 
 
+
+
     // Apply theme variables
     function applyTheme(themeKey) {
       const setVars = ({bg,panel,header,correct,incorrect,pbg,pbar,btn,hover,inbg,intext}) => {
@@ -4376,9 +4506,13 @@ header h1 { font-size: 1.8rem; }
       document.body.style.fontSize = `calc(1rem * ${settings.fontSize})`;
       applyTheme(profile.shop.activeTheme);
       saveSettings();
-      bgm.volume = settings.musicVolume;
-      if (settings.musicEnabled) bgm.play().catch(()=>{});
-      else bgm.pause();
+      
+      // Only apply music settings if bgm is available
+      if (bgm) {
+        bgm.volume = settings.musicVolume;
+        if (settings.musicEnabled) bgm.play().catch(()=>{});
+        else bgm.pause();
+      }
     }
 
     // DOM refs
@@ -4492,6 +4626,10 @@ header h1 { font-size: 1.8rem; }
     });
 
     function showScreen(key) {
+      console.log(`showScreen called with key: ${key}`);
+      console.log('Available screens:', Object.keys(screens));
+      console.log('Target screen element:', screens[key]);
+      
       // Clean up Arena timers if switching away from Arena
       if (arenaTimer || spawnTimer) {
         clearInterval(arenaTimer);
@@ -4509,11 +4647,30 @@ header h1 { font-size: 1.8rem; }
         }
       }
       
-      Object.values(screens).forEach(s => s.classList.remove('active'));
-      screens[key].classList.add('active');
+      console.log('Removing active class from all screens...');
+      Object.values(screens).forEach(s => {
+        s.classList.remove('active');
+        console.log(`Removed active from:`, s.id);
+      });
       
-      if (key === 'home') renderHome();
-      if (key === 'startup') renderStartupScreen();
+      console.log(`Adding active class to ${key} screen...`);
+      screens[key].classList.add('active');
+      console.log(`Screen ${key} is now active`);
+      
+      // Update currentScreen for keyboard navigation
+      currentScreen = key;
+      console.log('Current screen updated to:', currentScreen);
+      
+      if (key === 'home') {
+        console.log('Rendering home screen...');
+        renderHome();
+      }
+      if (key === 'startup') {
+        console.log('Rendering startup screen...');
+        renderStartupScreen();
+      }
+      
+      console.log(`showScreen completed for ${key}`);
     }
 
     // Achievements
@@ -4537,6 +4694,7 @@ header h1 { font-size: 1.8rem; }
       musicEnabledEl.checked = settings.musicEnabled;
       musicVolumeEl.value = settings.musicVolume;
     }
+    
     function saveOptions() {
       settings.headingFont = headingFontSelect.value;
       settings.mainFont = mainFontSelect.value;
@@ -4576,6 +4734,16 @@ header h1 { font-size: 1.8rem; }
       updateDuelGoldDisplay();
     }
 
+    // Update duel gold display (used in multiple places)
+    function updateDuelGoldDisplay() {
+      if (duelGoldDisplay) {
+        duelGoldDisplay.textContent = profile.gold;
+      }
+      if (goldValue) {
+        goldValue.textContent = profile.gold;
+      }
+    }
+
     // Particles
     const pCanvas = document.getElementById('particleCanvas');
     const pCtx = pCanvas.getContext('2d');
@@ -4603,30 +4771,7 @@ header h1 { font-size: 1.8rem; }
       requestAnimationFrame(loop);
     })();
 
-    // Background music (song.mp3) with user gesture unlock
-    const bgm = new Audio('song.mp3');
-bgm.loop = true;
-bgm.preload = 'auto';
 
-// Audio unlock is now handled by startBackgroundMusic() when profiles are loaded
-// The unlockBgm function is kept for compatibility but won't be called automatically
-function unlockBgm() {
-  bgm.volume = settings.musicVolume;
-  if (settings.musicEnabled) {
-    bgm.play().catch(err => console.warn('BGM play blocked:', err));
-  }
-}
-
-function startBackgroundMusic() {
-  if (settings.musicEnabled && !bgm.paused) {
-    // Music is already playing, just ensure volume is correct
-    bgm.volume = settings.musicVolume;
-  } else if (settings.musicEnabled) {
-    // Start music if it's not playing
-    bgm.volume = settings.musicVolume;
-    bgm.play().catch(err => console.warn('BGM play blocked:', err));
-  }
-}
 
     // Skills typing mode with combo system
     const WORDS_PER_SET = 7;
@@ -4644,6 +4789,22 @@ function startBackgroundMusic() {
     let correctInLine = 0;
 
     let wordStreak = 0; // continuous correct words across lines
+
+    // Combo multiplier system
+    function getMultiplier() {
+      if (wordStreak < 5) return 1;
+      if (wordStreak < 10) return 1.5;
+      if (wordStreak < 20) return 2;
+      if (wordStreak < 35) return 3;
+      if (wordStreak < 50) return 5;
+      if (wordStreak < 75) return 8;
+      if (wordStreak < 100) return 12;
+      return Math.min(20, 15 + Math.floor(wordStreak / 25));
+    }
+
+    function updateComboUI() {
+      comboDisplay.textContent = `Combo x${getMultiplier().toFixed(2)} (${wordStreak})`;
+    }
 
     // Word memory system to reduce repetition
     const wordMemory = {
@@ -5434,30 +5595,129 @@ raidInput.addEventListener('keydown', (e) => {
       // Check for achievements
       checkAchievements();
     }
+    function buyTheme(key) {
+      const meta = themeCatalog[key]; if (!meta) return;
+      if (profile.shop.purchasedThemes.includes(key)) return;
+      if (profile.gold < meta.price) { alert('Not enough gold'); return; }
+      profile.gold -= meta.price; profile.shop.purchasedThemes.push(key);
+      saveProfile(); renderShop(); renderHome();
+      
+      // Check for achievements
+      checkAchievements();
+    }
+    
     function applyThemeOwned(key) {
       if (!profile.shop.purchasedThemes.includes(key)) return;
       profile.shop.activeTheme = key; saveProfile(); applyTheme(key); renderShop();
     }
 
+    // First-time user popup functionality
+    function showFirstTimePopup() {
+      console.log('showFirstTimePopup called');
+      const popup = document.getElementById('firstTimePopup');
+      console.log('Popup element found:', popup);
+      if (popup) {
+        popup.style.display = 'flex';
+        console.log('Popup display set to flex');
+        // Focus the close button for accessibility
+        const closeBtn = document.getElementById('closeFirstTimePopup');
+        console.log('Close button found:', closeBtn);
+        if (closeBtn) {
+          closeBtn.focus();
+          console.log('Close button focused');
+        }
+      } else {
+        console.error('Popup element not found!');
+      }
+    }
+
+    function hideFirstTimePopup() {
+      const popup = document.getElementById('firstTimePopup');
+      if (popup) {
+        popup.style.display = 'none';
+      }
+    }
+
+    // Home button functionality
+    function addHomeButtonListeners() {
+      const homeButtons = [
+        'gameHomeBtn', 'raidHomeBtn', 'arenaHomeBtn', 'duelHomeBtn', 
+        'zenHomeBtn', 'shopHomeBtn', 'achievementsHomeBtn', 'optionsHomeBtn'
+      ];
+      
+      homeButtons.forEach(btnId => {
+        const btn = document.getElementById(btnId);
+        if (btn) {
+          console.log(`Adding click listener to ${btnId}:`, btn);
+          btn.addEventListener('click', () => {
+            console.log(`Home button ${btnId} clicked!`);
+            console.log('Current screen before:', currentScreen);
+            showScreen('home');
+            console.log('Current screen after showScreen:', currentScreen);
+            updateProfileDisplay();
+            renderHome();
+            console.log('Home button functionality completed');
+          });
+        } else {
+          console.warn(`Home button ${btnId} not found!`);
+        }
+      });
+    }
+
+    // Popup event listeners will be set up in init() function
+
     // Init
     function init(){ 
-      applySettings(); 
+      console.log('=== INIT FUNCTION STARTED ===');
+      console.log('Profile at start of init:', profile);
+      console.log('Profile name:', profile?.name);
+      console.log('Profile hasSeenFirstTimePopup:', profile?.hasSeenFirstTimePopup);
       
       // Check if we have a saved profile
       if (profile && profile.name) {
+        console.log('Existing profile found, loading...');
         // Automatically load the existing profile and go to home
         profile.lastPlayed = Date.now();
         saveProfile();
         startBackgroundMusic();
+        applySettings(); // Move applySettings after startBackgroundMusic
         checkAchievements();
         showScreen('home');
         updateProfileDisplay();
         renderHome();
+        
+        // Check if this is the first time playing and show popup
+        console.log('Profile loaded, checking popup status...');
+        console.log('profile.hasSeenFirstTimePopup:', profile.hasSeenFirstTimePopup);
+        if (!profile.hasSeenFirstTimePopup) {
+          console.log('First time user, scheduling popup...');
+          setTimeout(() => showFirstTimePopup(), 1000);
+          profile.hasSeenFirstTimePopup = true;
+          saveProfile();
+          console.log('Popup scheduled and flag saved');
+        } else {
+          console.log('User has already seen popup, skipping...');
+        }
       } else {
+        console.log('No profile found, showing startup screen...');
         // Show startup screen to create new profile
         showScreen('startup');
         renderStartupScreen();
       }
+      
+      // Add home button listeners
+      addHomeButtonListeners();
+      
+      // Set up popup event listeners
+      const closePopupBtn = document.getElementById('closeFirstTimePopup');
+      if (closePopupBtn) {
+        closePopupBtn.addEventListener('click', hideFirstTimePopup);
+        console.log('Popup close button event listener added');
+      } else {
+        console.warn('Popup close button not found for event listener');
+      }
+      
+      console.log('=== INIT FUNCTION COMPLETED ===');
     }
 
     // Debug function to show Arena state
@@ -5475,6 +5735,58 @@ raidInput.addEventListener('keydown', (e) => {
 
     // Make debug function available globally for testing
     window.debugArenaState = debugArenaState;
+    
+    // Debug function to force show first-time popup
+    function debugShowPopup() {
+      console.log('Forcing popup to show...');
+      showFirstTimePopup();
+    }
+    
+    // Debug function to test Home button functionality
+    function debugHomeButton() {
+      console.log('Testing Home button functionality...');
+      console.log('Current profile:', profile);
+      console.log('hasSeenFirstTimePopup:', profile.hasSeenFirstTimePopup);
+      
+      // Force reset the popup flag for testing
+      profile.hasSeenFirstTimePopup = false;
+      saveProfile();
+      console.log('Reset hasSeenFirstTimePopup to false');
+      
+      // Test the popup
+      setTimeout(() => showFirstTimePopup(), 1000);
+    }
+    
+    // Debug function to reset popup flag
+    function debugResetPopup() {
+      console.log('Resetting popup flag...');
+      if (profile) {
+        profile.hasSeenFirstTimePopup = false;
+        saveProfile();
+        console.log('Popup flag reset to false');
+        
+        // Reload the page to test
+        console.log('Reloading page to test popup...');
+        setTimeout(() => location.reload(), 1000);
+      } else {
+        console.log('No profile found');
+      }
+    }
+    
+    // Debug function to clear profile for testing
+    function debugClearProfile() {
+      console.log('Clearing profile for testing...');
+      localStorage.removeItem(STORAGE_KEYS.profile);
+      console.log('Profile cleared from localStorage');
+      console.log('Reloading page...');
+      setTimeout(() => location.reload(), 1000);
+    }
+    
+    // Make debug functions available globally for testing
+    window.debugShowPopup = debugShowPopup;
+    window.debugHomeButton = debugHomeButton;
+    window.debugResetPopup = debugResetPopup;
+    window.debugClearProfile = debugClearProfile;
 
     // Keyboard Navigation System
     let currentFocusIndex = 0;
@@ -5835,6 +6147,67 @@ raidInput.addEventListener('keydown', (e) => {
       }
     };
 
+    // Render achievements function (if not already defined)
+    if (typeof renderAchievements === 'undefined') {
+      function renderAchievements() {
+        const titleSelectionList = document.getElementById('titleSelectionList');
+        const unlockedList = document.getElementById('unlockedList');
+        const lockedList = document.getElementById('lockedList');
+        
+        if (titleSelectionList) {
+          titleSelectionList.innerHTML = '';
+          // Add "No Title" option
+          const noTitleOption = document.createElement('div');
+          noTitleOption.className = `title-option ${!profile.achievements.selectedTitle ? 'selected' : ''}`;
+          noTitleOption.textContent = 'No Title';
+          noTitleOption.onclick = () => selectTitle(null);
+          titleSelectionList.appendChild(noTitleOption);
+          
+          if (profile.achievements.titles.length > 0) {
+            profile.achievements.titles.forEach(title => {
+              const titleOption = document.createElement('div');
+              titleOption.className = `title-option ${title === profile.achievements.selectedTitle ? 'selected' : ''}`;
+              titleOption.textContent = title;
+              titleOption.onclick = () => selectTitle(title);
+              titleSelectionList.appendChild(titleOption);
+            });
+          } else {
+            titleSelectionList.appendChild(document.createElement('div')).innerHTML = '<div style="color: var(--muted); font-style: italic;">No titles unlocked yet</div>';
+          }
+        }
+        
+        unlockedList.innerHTML = '';
+        lockedList.innerHTML = '';
+        
+        Object.values(achievements).forEach(achievement => {
+          const isUnlocked = profile.achievements.unlocked.includes(achievement.id);
+          const list = isUnlocked ? unlockedList : lockedList;
+          
+          const achievementItem = document.createElement('div');
+          achievementItem.className = `achievement-item ${isUnlocked ? 'unlocked' : 'locked'}`;
+          
+          const icon = isUnlocked ? '🏆' : '🔒';
+          const titleText = isUnlocked ? `Title: ${achievement.title}` : `Unlock: ${achievement.title}`;
+          
+          achievementItem.innerHTML = `
+            <div class="achievement-icon">${icon}</div>
+            <div class="achievement-info">
+              <div class="achievement-name">${achievement.name}</div>
+              <div class="achievement-description">${achievement.description}</div>
+              <div class="achievement-title">${titleText}</div>
+            </div>
+          `;
+          
+          list.appendChild(achievementItem);
+        });
+        
+        // Show message if no achievements unlocked
+        if (unlockedList.children.length === 0) {
+          unlockedList.innerHTML = '<div style="text-align: center; color: var(--muted); padding: 1rem;">No achievements unlocked yet. Keep playing to earn titles!</div>';
+        }
+      }
+    }
+
     // Update renderAchievements to refresh keyboard navigation
     const originalRenderAchievements = renderAchievements;
     renderAchievements = function() {
@@ -5845,6 +6218,153 @@ raidInput.addEventListener('keydown', (e) => {
       }
     };
 
+    // Render achievements function (if not already defined)
+    if (typeof renderAchievements === 'undefined') {
+      function renderAchievements() {
+        const titleSelectionList = document.getElementById('titleSelectionList');
+        const unlockedList = document.getElementById('unlockedList');
+        const lockedList = document.getElementById('lockedList');
+        
+        if (titleSelectionList) {
+          titleSelectionList.innerHTML = '';
+          // Add "No Title" option
+          const noTitleOption = document.createElement('div');
+          noTitleOption.className = `title-option ${!profile.achievements.selectedTitle ? 'selected' : ''}`;
+          noTitleOption.textContent = 'No Title';
+          noTitleOption.onclick = () => selectTitle(null);
+          titleSelectionList.appendChild(noTitleOption);
+          
+          if (profile.achievements.titles.length > 0) {
+            profile.achievements.titles.forEach(title => {
+              const titleOption = document.createElement('div');
+              titleOption.className = `title-option ${title === profile.achievements.selectedTitle ? 'selected' : ''}`;
+              titleOption.textContent = title;
+              titleOption.onclick = () => selectTitle(title);
+              titleSelectionList.appendChild(titleOption);
+            });
+          } else {
+            titleSelectionList.appendChild(document.createElement('div')).innerHTML = '<div style="color: var(--muted); font-style: italic;">No titles unlocked yet</div>';
+          }
+        }
+        
+        unlockedList.innerHTML = '';
+        lockedList.innerHTML = '';
+        
+        Object.values(achievements).forEach(achievement => {
+          const isUnlocked = profile.achievements.unlocked.includes(achievement.id);
+          const list = isUnlocked ? unlockedList : lockedList;
+          
+          const achievementItem = document.createElement('div');
+          achievementItem.className = `achievement-item ${isUnlocked ? 'unlocked' : 'locked'}`;
+          
+          const icon = isUnlocked ? '🏆' : '🔒';
+          const titleText = isUnlocked ? `Title: ${achievement.title}` : `Unlock: ${achievement.title}`;
+          
+          achievementItem.innerHTML = `
+            <div class="achievement-icon">${icon}</div>
+            <div class="achievement-info">
+              <div class="achievement-name">${achievement.name}</div>
+              <div class="achievement-description">${achievement.description}</div>
+              <div class="achievement-title">${titleText}</div>
+            </div>
+          `;
+          
+          list.appendChild(achievementItem);
+        });
+        
+        // Show message if no achievements unlocked
+        if (unlockedList.children.length === 0) {
+          unlockedList.innerHTML = '<div style="text-align: center; color: var(--muted); padding: 1rem;">No achievements unlocked yet. Keep playing to earn titles!</div>';
+        }
+      }
+    }
+
+    // Render shop function (if not already defined)
+    if (typeof renderShop === 'undefined') {
+      function renderShop() {
+        // Themes
+        themeCards.innerHTML = '';
+        Object.entries(themeCatalog).forEach(([key, meta]) => {
+          const owned = profile.shop.purchasedThemes.includes(key);
+          const isActive = profile.shop.activeTheme === key;
+          const card = document.createElement('div');
+          card.className = 'card';
+          card.innerHTML = `
+            <div class="card-row">
+              <div style="font-weight:700;">${meta.name}</div>
+              <div class="muted">${owned ? 'Owned' : meta.price + ' gold'}</div>
+            </div>
+            <div class="theme-swatch">
+              <div class="swatch" style="background:${meta.swatch[0]}"></div>
+              <div class="swatch" style="background:${meta.swatch[1]}"></div>
+              <div class="swatch" style="background:${meta.swatch[2]}"></div>
+            </div>
+            <div class="card-row">
+              <button class="btn ${owned ? '' : 'btn-ghost'}" data-type="theme" data-action="${owned ? 'apply' : 'buy'}" data-key="${key}">
+                ${owned ? (isActive ? 'Active' : 'Apply') : 'Buy'}
+              </button>
+            </div>
+          `;
+          themeCards.appendChild(card);
+        });
+
+        // Bind buttons
+        document.querySelectorAll('#shopScreen button[data-type]').forEach(btn => {
+          btn.addEventListener('click', () => {
+            const type = btn.getAttribute('data-type');
+            const action = btn.getAttribute('data-action');
+            const key = btn.getAttribute('data-key');
+            if (type === 'theme') {
+              if (action === 'buy') buyTheme(key); else applyThemeOwned(key);
+            }
+          });
+        });
+      }
+    }
+
+    // Render shop function (if not already defined)
+    if (typeof renderShop === 'undefined') {
+      function renderShop() {
+        // Themes
+        themeCards.innerHTML = '';
+        Object.entries(themeCatalog).forEach(([key, meta]) => {
+          const owned = profile.shop.purchasedThemes.includes(key);
+          const isActive = profile.shop.activeTheme === key;
+          const card = document.createElement('div');
+          card.className = 'card';
+          card.innerHTML = `
+            <div class="card-row">
+              <div style="font-weight:700;">${meta.name}</div>
+              <div class="muted">${owned ? 'Owned' : meta.price + ' gold'}</div>
+            </div>
+            <div class="theme-swatch">
+              <div class="swatch" style="background:${meta.swatch[0]}"></div>
+              <div class="swatch" style="background:${meta.swatch[1]}"></div>
+              <div class="swatch" style="background:${meta.swatch[2]}"></div>
+            </div>
+            <div class="card-row">
+              <button class="btn ${owned ? '' : 'btn-ghost'}" data-type="theme" data-action="${owned ? 'apply' : 'buy'}" data-key="${key}">
+                ${owned ? (isActive ? 'Active' : 'Apply') : 'Buy'}
+              </button>
+            </div>
+          `;
+          themeCards.appendChild(card);
+        });
+
+        // Bind buttons
+        document.querySelectorAll('#shopScreen button[data-type]').forEach(btn => {
+          btn.addEventListener('click', () => {
+            const type = btn.getAttribute('data-type');
+            const action = btn.getAttribute('data-action');
+            const key = btn.getAttribute('data-key');
+            if (type === 'theme') {
+              if (action === 'buy') buyTheme(key); else applyThemeOwned(key);
+            }
+          });
+        });
+      }
+    }
+
     // Update renderShop to refresh keyboard navigation
     const originalRenderShop = renderShop;
     renderShop = function() {
@@ -5854,6 +6374,8 @@ raidInput.addEventListener('keydown', (e) => {
         setTimeout(() => initKeyboardNavigation('shop'), 50);
       }
     };
+
+
 
     // Init
     init();
