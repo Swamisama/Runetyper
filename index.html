@@ -232,6 +232,40 @@
     .profile-stats { font-size: .9rem; color: var(--muted); margin-top: .2rem; }
 
     /* Achievements page */
+    #achievementsScreen {
+      /* Ensure it starts at the top like other screens */
+      margin-top: 0;
+    }
+    
+    #achievementsScreen .row {
+      /* Ensure the header row doesn't have extra margins */
+      margin-bottom: 0.5rem;
+    }
+    
+    #achievementsContent {
+      /* Ensure content starts immediately after header */
+      margin-top: 0;
+    }
+    
+    #titleSelection {
+      /* Reduce top margin if it's pushing content down */
+      margin-top: 0;
+      padding-top: 0;
+    }
+    
+    #titleSelection h4 {
+      /* Reduce margin on the title selection heading */
+      margin-top: 0;
+      margin-bottom: 0.5rem;
+    }
+    
+    #unlockedAchievements h3,
+    #lockedAchievements h3 {
+      /* Ensure achievement section headings don't have excessive margins */
+      margin-top: 1rem;
+      margin-bottom: 0.5rem;
+    }
+    
     #achievementsScreen .achievement-item {
       display: flex; align-items: center; gap: .8rem; padding: .8rem;
       border: 1px solid rgba(255,255,255,.1); border-radius: 8px;
@@ -817,9 +851,11 @@ header h1 { font-size: 1.8rem; }
     
     function resetProfile() {
       if (confirm('Are you sure you want to reset your profile? This will delete all progress and cannot be undone.')) {
+        // Clear ALL localStorage completely
+        localStorage.clear();
+        
         // Clear the profile completely
         profile = null;
-        localStorage.removeItem(STORAGE_KEYS.profile);
         
         // Return to startup screen to create new profile
         showScreen('startup');
@@ -4246,7 +4282,7 @@ header h1 { font-size: 1.8rem; }
       uiScale: 1,
       fontSize: 1,
       musicEnabled: true,
-      musicVolume: 0.5
+      musicVolume: 0.2
     };
 
     let profile = loadJson(STORAGE_KEYS.profile, defaultProfile);
