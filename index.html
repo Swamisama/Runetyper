@@ -4754,6 +4754,9 @@ header h1 { font-size: 1.8rem; }
       // Check for achievements when home screen is rendered
       checkAchievements();
 
+      // Initialize keyboard navigation for home screen (without auto-focus)
+      initKeyboardNavigation('home');
+
       skillButtonsContainer.innerHTML = '';
       Object.entries(profile.skills).forEach(([key, s]) => {
         const btn = document.createElement('button');
@@ -5834,6 +5837,9 @@ raidInput.addEventListener('keydown', (e) => {
       currentScreen = screen;
       currentFocusIndex = 0;
       
+      // Clear focusable elements first
+      focusableElements = [];
+      
       if (screen === 'home') {
         // Home screen: top row buttons + skill buttons
         const topRowButtons = [
@@ -5863,6 +5869,10 @@ raidInput.addEventListener('keydown', (e) => {
           skillRows: window.skillRows,
           totalElements: focusableElements.length
         });
+        
+        // For home screen, don't automatically set focus to avoid interfering with profile creation
+        // Focus will be set manually when needed
+        return;
       } else if (screen === 'achievements') {
         // Achievements: title options + achievement items
         const titleOptions = Array.from(document.querySelectorAll('#titleSelectionList .title-option'));
@@ -5875,6 +5885,11 @@ raidInput.addEventListener('keydown', (e) => {
           achievementItemsCount: achievementItems.length,
           totalElements: focusableElements.length
         });
+      } else if (screen === 'startup') {
+        // Startup screen: no keyboard navigation needed
+        focusableElements = [];
+        console.log('Startup screen keyboard navigation initialized: no focusable elements');
+        return;
       } else if (screen === 'shop') {
         // Shop: theme buttons in grid layout (not the cards themselves)
         const themeButtons = Array.from(document.querySelectorAll('#shopScreen .card button[data-type="theme"]'));
@@ -5917,9 +5932,11 @@ raidInput.addEventListener('keydown', (e) => {
         return;
       }
       
-      // Set initial focus
+      // Set initial focus for non-home screens
       if (focusableElements.length > 0) {
-        setFocus(0);
+        setTimeout(() => {
+          setFocus(0);
+        }, 100);
       }
     }
 
@@ -5945,6 +5962,8 @@ raidInput.addEventListener('keydown', (e) => {
 
     // Handle keyboard navigation
     function handleKeyboardNavigation(e) {
+      console.log('Global keyboard handler:', e.key, 'currentScreen:', currentScreen, 'focusableElements.length:', focusableElements.length);
+      
       // Handle Escape key for all screens
       if (e.key === 'Escape') {
         e.preventDefault();
@@ -5953,6 +5972,18 @@ raidInput.addEventListener('keydown', (e) => {
           showScreen('home');
           return;
         }
+        return;
+      }
+      
+      // Don't handle keyboard navigation on startup screen
+      if (currentScreen === 'startup') {
+        console.log('Ignoring keyboard event on startup screen');
+        return;
+      }
+      
+      // Don't handle Enter/Space if the profile name input is focused
+      if ((e.key === 'Enter' || e.key === ' ') && document.activeElement === document.getElementById('profileNameInput')) {
+        console.log('Ignoring Enter/Space event on profile name input');
         return;
       }
       
@@ -6151,7 +6182,9 @@ raidInput.addEventListener('keydown', (e) => {
         case 'Enter':
         case ' ':
           e.preventDefault();
+          console.log('Processing Enter/Space, currentFocusIndex:', currentFocusIndex, 'focusableElements[currentFocusIndex]:', focusableElements[currentFocusIndex]);
           if (focusableElements[currentFocusIndex]) {
+            console.log('Clicking element:', focusableElements[currentFocusIndex].id || focusableElements[currentFocusIndex].textContent);
             focusableElements[currentFocusIndex].click();
           }
           return;
@@ -6169,18 +6202,17 @@ raidInput.addEventListener('keydown', (e) => {
     // Update showScreen function to initialize keyboard navigation
     const originalShowScreen = showScreen;
     showScreen = function(key) {
-      originalShowScreen(key);
-      // Small delay to ensure DOM is fully updated before initializing keyboard navigation
-      setTimeout(() => initKeyboardNavigation(key), 10);
+                   originalShowScreen(key);
+             // Small delay to ensure DOM is fully updated before initializing keyboard navigation
+             setTimeout(() => initKeyboardNavigation(key), 10);
     };
 
     // Update renderHome to refresh keyboard navigation
     const originalRenderHome = renderHome;
     renderHome = function() {
       originalRenderHome();
-      if (currentScreen === 'home') {
-        initKeyboardNavigation('home');
-      }
+      // Don't call initKeyboardNavigation here since it's already called by showScreen wrapper
+      // This prevents duplicate initialization and potential race conditions
     };
 
     // Render achievements function (if not already defined)
